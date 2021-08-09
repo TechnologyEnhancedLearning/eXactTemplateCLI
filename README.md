@@ -1,20 +1,11 @@
 # Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+This Python script can be used as a CLI to build the eXact elfh templates for both Packager type 4 templates and the online editor type 6 template.
 
 # Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+   
+1.	Install Python on your PC or Mac.
+2.	Clone this repository or copy the build.py file to your computer. 
+3.	Add the path to the build.py file to your PATH environment variable.
+4.	Navigate to the template development folder, using the command line and enter "build.py --help" to see the CLI options.
+5.  From the template development folder, using the command line enter "build.py type4" to build type 4 templates or "build.py type6" to build type 6 templates.
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
-
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
-
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
