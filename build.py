@@ -94,9 +94,11 @@ def type6(templateVersion=0.0, modelVersions=0.0, cleanup='y'):
       print('Specify the template version (e.g. 6.1):')
       templateVersion = input()
 
-  if modelVersions == 0.0:
-      print('Specify the version for the models (e.g. 6.1):')
-      modelVersions = input()
+  modelVersions = templateVersion
+
+  #if modelVersions == 0.0:
+  #    print('Specify the version for the models (e.g. 6.1):')
+  #    modelVersions = input()
 
   try:
       val = float(templateVersion)
