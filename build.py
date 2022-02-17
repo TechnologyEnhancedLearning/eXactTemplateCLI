@@ -1,5 +1,6 @@
 import shutil, zipfile, os, fileinput, fire, sys
 from pathlib import Path
+from xslFiles import xslFiles
 
 def type6(templateVersion=0.0, modelVersions=0.0, cleanup='y'):
   """
@@ -8,40 +9,41 @@ def type6(templateVersion=0.0, modelVersions=0.0, cleanup='y'):
     :param cleanup: default is 'y', to to remove all the copied files and folders that are created during the build process.  Set to 'n' if you want to debug an issue with the build script.
     :return: An .xpta file that can be installed in eXact Packager
   """
+
   models = [  {   'name': 'ELFH_ANIMATION', 
-                    'sharedStyles': ['htmlTransformations.xsl', 'richTextEditor.xsl'],
+                    'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
                 {   'name': 'ELFH_Assessment', 
-                    'sharedStyles': ['htmlTransformations.xsl', 'richTextEditor.xsl'],
+                    'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
                 {   'name': 'ELFH_Check', 
-                    'sharedStyles': ['htmlTransformations.xsl', 'richTextEditor.xsl'],
+                    'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
                 {   'name': 'ELFH_Free', 
-                    'sharedStyles': ['htmlTransformations.xsl', 'richTextEditor.xsl'],
+                    'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
                 {   'name': 'ELFH_IMG_STACKER', 
-                    'sharedStyles': ['htmlTransformations.xsl', 'richTextEditor.xsl'],
+                    'sharedStyles': [],
                     'sharedCommon': []
                 },
                 {   'name': 'ELFH_JS_DDP', 
-                    'sharedStyles': ['htmlTransformations.xsl', 'richTextEditor.xsl'],
+                    'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
                 {   'name': 'ELFH_JS_INFO_HS', 
-                   'sharedStyles': ['htmlTransformations.xsl', 'richTextEditor.xsl'],
+                   'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                    'sharedCommon': []
                 },
                 {   'name': 'ELFH_JS_QUES_HS', 
-                    'sharedStyles': ['htmlTransformations.xsl', 'richTextEditor.xsl'],
+                    'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
                 {   'name': 'ELFH_MRB', 
-                    'sharedStyles': ['htmlTransformations.xsl', 'richTextEditor.xsl'],
+                    'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
                 {   'name': 'ELFH_Multi', 
@@ -49,7 +51,7 @@ def type6(templateVersion=0.0, modelVersions=0.0, cleanup='y'):
                     'sharedCommon': []
                 },
                 {   'name': 'ELFH_Pairs', 
-                    'sharedStyles': ['htmlTransformations.xsl', 'richTextEditor.xsl'],
+                    'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
                 {   'name': 'ELFH_Question_Bank', 
@@ -57,19 +59,19 @@ def type6(templateVersion=0.0, modelVersions=0.0, cleanup='y'):
                     'sharedCommon': []
                 },
                 {   'name': 'ELFH_Radio', 
-                    'sharedStyles': ['htmlTransformations.xsl', 'richTextEditor.xsl'],
+                    'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
                 {   'name': 'ELFH_Session', 
-                    'sharedStyles': ['htmlTransformations.xsl', 'richTextEditor.xsl'],
+                    'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
                 {   'name': 'ELFH_Sort', 
-                    'sharedStyles': ['htmlTransformations.xsl', 'richTextEditor.xsl'],
+                    'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
                 {   'name': 'ELFH_Sort_Order', 
-                    'sharedStyles': ['htmlTransformations.xsl', 'richTextEditor.xsl'],
+                    'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
                 {   'name': 'ELFH_STREAM_VIDEO', 
@@ -77,18 +79,14 @@ def type6(templateVersion=0.0, modelVersions=0.0, cleanup='y'):
                     'sharedCommon': []
                 },
                 {   'name': 'ELFH_Tab', 
-                    'sharedStyles': ['htmlTransformations.xsl', 'richTextEditor.xsl'],
+                    'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
                 {   'name': 'ELFH_TF', 
-                    'sharedStyles': ['htmlTransformations.xsl', 'richTextEditor.xsl'],
+                    'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 }
            ]     
-
-#    modelFolders = [    'ELFH_Session', 
-#                        'ELFH_Free']
-
 
   if templateVersion == 0.0:
       print('Specify the template version (e.g. 6.1):')
@@ -295,5 +293,5 @@ def type4(templateVersion=0.0, cleanup='y'):
 if __name__ == "__main__":
   fire.Fire({
     'type4': type4,
-    'type6': type6,
+    'type6': type6
   })
