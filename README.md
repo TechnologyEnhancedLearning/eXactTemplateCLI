@@ -7,6 +7,6 @@ This Python script can be used as a CLI to build the eXact elfh templates for bo
 2.	Clone this repository or copy the build.py file to your computer. 
 3.	Add the path to the build.py file to your PATH environment variable.
 4.	Navigate to the template development folder, using the command line and enter "build.py --help" to see the CLI options.
-5.  From the template development folder, using the command line enter "build.py type4" to build type 4 templates or "build.py type6" to build type 6 templates.
+5.  From the template development folder, using the command line enter "python build.py type4" to build type 4 templates or "python build.py type6" to build type 6 templates.
 6.  Follow the on-screen instructions.
 
