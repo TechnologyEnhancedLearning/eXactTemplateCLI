@@ -11,7 +11,7 @@ def type6(templateVersion=0.0, modelVersions=0.0, cleanup='y'):
   """
 
   models = [  {   'name': 'ELFH_ANIMATION', 
-                    'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
+                    'sharedStyles': [],
                     'sharedCommon': []
                 },
                 {   'name': 'ELFH_Assessment', 
