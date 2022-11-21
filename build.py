@@ -105,7 +105,7 @@ def type6(templateVersion=0.0, modelVersions=0.0, cleanup='y'):
       print("Error!  Template and model versions must be a floating point number, e.g. 1.0")
       sys.exit()    
 
-  cwd = Path.cwd()
+  current_working_directory = Path.cwd()
 
   distFolder = 'dist'
   xptaFilename = 'eXact-elfh-templates'
@@ -115,16 +115,16 @@ def type6(templateVersion=0.0, modelVersions=0.0, cleanup='y'):
   xptVersionReplaceStr = '<template version="' + str(modelVersions) + '"'
   rootVersionReplaceStr = '<template version="' + str(templateVersion) + '"'
 
-  if Path.exists(cwd / distFolder):
-      shutil.rmtree(cwd / distFolder)
+  if Path.exists(current_working_directory / distFolder):
+      shutil.rmtree(current_working_directory / distFolder)
 
-  os.mkdir(cwd / distFolder)
+  os.mkdir(current_working_directory / distFolder)
 
-  buildFolder = Path.absolute(cwd / 'dist')
+  buildFolder = Path.absolute(current_working_directory / 'dist')
 
   print('Copying models ...')
 
-  templateZip = zipfile.ZipFile('dist\\' + xptaFilename, 'w', zipfile.ZIP_DEFLATED)
+  templateZip = zipfile.ZipFile(os.path.join('dist', xptaFilename), 'w', zipfile.ZIP_DEFLATED)
 
   for model in models:
 
@@ -132,7 +132,7 @@ def type6(templateVersion=0.0, modelVersions=0.0, cleanup='y'):
       modelPath = Path.absolute(buildFolder / modelName)
 
       # copy model code into build folder
-      shutil.copytree(cwd / modelName, buildFolder / modelName)
+      shutil.copytree(current_working_directory / modelName, buildFolder / modelName)
       
       if not Path.exists(buildFolder / modelName / "styles"):
           os.mkdir(buildFolder / modelName / "styles")
@@ -141,7 +141,7 @@ def type6(templateVersion=0.0, modelVersions=0.0, cleanup='y'):
           os.mkdir(buildFolder / modelName / "common")
 
       for styleFile in model["sharedStyles"]:
-          shutil.copyfile(cwd / "shared/styles" / styleFile, buildFolder / modelName / "styles" / styleFile)
+          shutil.copyfile(current_working_directory / "shared/styles" / styleFile, buildFolder / modelName / "styles" / styleFile)
 
       # add version numbers to the LO's configuration files
       with fileinput.FileInput(Path.absolute(buildFolder / modelName / 'lomodel.xml'), inplace=True) as file:
@@ -157,15 +157,15 @@ def type6(templateVersion=0.0, modelVersions=0.0, cleanup='y'):
       # zip the model up into an xpt
       shutil.make_archive(buildFolder / modelName, 'zip', buildFolder / modelName)
       xptPath = str(modelName)+'.xpt'
-      os.rename(str(buildFolder / modelName)+'.zip', str(buildFolder) + '\\' + xptPath )
+      os.rename(str(buildFolder / modelName)+'.zip', os.path.join(buildFolder,xptPath ))
 
       # put the xpt into the template zip file
-      templateZip.write(  str(buildFolder) + '\\' + xptPath, xptPath  )
+      templateZip.write(  str(buildFolder) + '/' + xptPath, xptPath  )
 
       # clean up, delete the build folder model, it's no longer needed
       if cleanup != 'n':
           shutil.rmtree(buildFolder / modelName)
-          os.remove(str(buildFolder) + '\\' + xptPath)
+          os.remove(str(buildFolder) + '/' + xptPath)
           
 
       print(str(model["name"]) + ' built')
@@ -173,7 +173,7 @@ def type6(templateVersion=0.0, modelVersions=0.0, cleanup='y'):
 
   templateZip.close()
 
-  os.rename(str(buildFolder)+'\\' + xptaFilename, str(buildFolder) + '\\' + xptaFilename + '-v' + str(templateVersion) + '.xpta')
+  os.rename(str(buildFolder)+'/' + xptaFilename, str(buildFolder) + '/' + xptaFilename + '-v' + str(templateVersion) + '.xpta')
 
   print('Build Complete')
 
@@ -202,7 +202,7 @@ def type4(templateVersion=0.0, cleanup='y'):
       print("Error!  Template and model versions must be a floating point number, e.g. 1.0")
       sys.exit()    
 
-  cwd = Path.cwd()
+  current_working_directory = Path.cwd()
 
   distFolder = 'dist'
   xptaFilename = 'eXact-elfh-templates'
@@ -212,12 +212,12 @@ def type4(templateVersion=0.0, cleanup='y'):
   xptVersionReplaceStr = '<template version="' + str(modelVersions) + '"'
   rootVersionReplaceStr = '<template version="' + str(templateVersion) + '"'
 
-  if Path.exists(cwd / distFolder):
-      shutil.rmtree(cwd / distFolder)
+  if Path.exists(current_working_directory / distFolder):
+      shutil.rmtree(current_working_directory / distFolder)
 
-  os.mkdir(cwd / distFolder)
+  os.mkdir(current_working_directory / distFolder)
 
-  buildFolder = Path.absolute(cwd / 'dist')
+  buildFolder = Path.absolute(current_working_directory / 'dist')
 
   modelFolders = [    'ELFH_ANIMATION',
                       'ELFH_Assessment',
@@ -245,16 +245,16 @@ def type4(templateVersion=0.0, cleanup='y'):
 
   print('Copying models ...')
 
-  templateZip = zipfile.ZipFile('dist\\' + xptaFilename, 'w', zipfile.ZIP_DEFLATED)
+  templateZip = zipfile.ZipFile(os.path.join('dist', xptaFilename), 'w', zipfile.ZIP_DEFLATED)
 
   for model in modelFolders:
 
       modelPath = Path.absolute(buildFolder / model)
 
       # copy model code into build folder and include common and styles folders
-      shutil.copytree(cwd / model, buildFolder / model)
-      shutil.copytree(cwd / 'common', modelPath / 'common', dirs_exist_ok=True)
-      shutil.copytree(cwd / 'styles', modelPath / 'styles', dirs_exist_ok=True)
+      shutil.copytree(current_working_directory / model, buildFolder / model)
+      shutil.copytree(current_working_directory / 'common', modelPath / 'common', dirs_exist_ok=True)
+      shutil.copytree(current_working_directory / 'styles', modelPath / 'styles', dirs_exist_ok=True)
 
       # add version numbers to the LO's configuration files
       with fileinput.FileInput(Path.absolute(buildFolder / model / 'lomodel.xml'), inplace=True) as file:
@@ -270,15 +270,15 @@ def type4(templateVersion=0.0, cleanup='y'):
       # zip the model up into an xpt
       shutil.make_archive(buildFolder / model, 'zip', buildFolder / model)
       xptPath = str(model)+'.xpt'
-      os.rename(str(buildFolder / model)+'.zip', str(buildFolder) + '\\' + xptPath )
+      os.rename(os.path.join(buildFolder, str(model)+'.zip'), os.path.join(buildFolder, xptPath) )
 
       # put the xpt into the template zip file
-      templateZip.write(  str(buildFolder) + '\\' + xptPath, xptPath  )
+      templateZip.write(os.path.join(buildFolder, xptPath, xptPath))
 
       # clean up, delete the build folder model, it's no longer needed
       if cleanup != 'n':
           shutil.rmtree(buildFolder / model)
-          os.remove(str(buildFolder) + '\\' + xptPath)
+          os.remove(os.path.join(buildFolder, xptPath))
 
 
       print(str(model) + ' built')
@@ -286,7 +286,7 @@ def type4(templateVersion=0.0, cleanup='y'):
 
   templateZip.close()
 
-  os.rename(str(buildFolder)+'\\' + xptaFilename, str(buildFolder) + '\\' + xptaFilename + '-v' + str(templateVersion) + '.xpta')
+  os.rename(os.path.join(buildFolder, xptaFilename), os.path.join(buildFolder, str(xptaFilename) + '-v' + str(templateVersion) + '.xpta'))
 
   print('Build Complete')
 
