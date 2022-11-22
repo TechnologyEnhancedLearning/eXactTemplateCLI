@@ -157,15 +157,15 @@ def type6(templateVersion=0.0, modelVersions=0.0, cleanup='y'):
       # zip the model up into an xpt
       shutil.make_archive(buildFolder / modelName, 'zip', buildFolder / modelName)
       xptPath = str(modelName)+'.xpt'
-      os.rename(str(buildFolder / modelName)+'.zip', os.path.join(buildFolder,xptPath ))
+      os.rename(str(buildFolder / modelName) +'.zip', buildFolder / xptPath )
 
       # put the xpt into the template zip file
-      templateZip.write(  str(buildFolder) + '/' + xptPath, xptPath  )
+      templateZip.write( buildFolder / xptPath, xptPath  )
 
       # clean up, delete the build folder model, it's no longer needed
       if cleanup != 'n':
           shutil.rmtree(buildFolder / modelName)
-          os.remove(str(buildFolder) + '/' + xptPath)
+          os.remove(buildFolder / xptPath)
           
 
       print(str(model["name"]) + ' built')
@@ -173,7 +173,7 @@ def type6(templateVersion=0.0, modelVersions=0.0, cleanup='y'):
 
   templateZip.close()
 
-  os.rename(str(buildFolder)+'/' + xptaFilename, str(buildFolder) + '/' + xptaFilename + '-v' + str(templateVersion) + '.xpta')
+  os.rename(buildFolder / xptaFilename, str(buildFolder / xptaFilename ) + '-v' + str(templateVersion) + '.xpta')
 
   print('Build Complete')
 
@@ -270,15 +270,15 @@ def type4(templateVersion=0.0, cleanup='y'):
       # zip the model up into an xpt
       shutil.make_archive(buildFolder / model, 'zip', buildFolder / model)
       xptPath = str(model)+'.xpt'
-      os.rename(os.path.join(buildFolder, str(model)+'.zip'), os.path.join(buildFolder, xptPath) )
+      os.rename(str(buildFolder / model) + '.zip', buildFolder / xptPath)
 
       # put the xpt into the template zip file
-      templateZip.write(os.path.join(buildFolder, xptPath, xptPath))
+      templateZip.write(buildFolder / xptPath, xptPath)
 
       # clean up, delete the build folder model, it's no longer needed
       if cleanup != 'n':
           shutil.rmtree(buildFolder / model)
-          os.remove(os.path.join(buildFolder, xptPath))
+          os.remove(buildFolder / xptPath)
 
 
       print(str(model) + ' built')
@@ -286,7 +286,7 @@ def type4(templateVersion=0.0, cleanup='y'):
 
   templateZip.close()
 
-  os.rename(os.path.join(buildFolder, xptaFilename), os.path.join(buildFolder, str(xptaFilename) + '-v' + str(templateVersion) + '.xpta'))
+  os.rename(buildFolder / xptaFilename, str(buildFolder / xptaFilename) + '-v' + str(templateVersion) + '.xpta')
 
   print('Build Complete')
 
