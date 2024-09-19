@@ -1,8 +1,11 @@
-import shutil, zipfile, os, fileinput, fire, sys
+import shutil, zipfile, os, fileinput, fire, sys, re
 from pathlib import Path
 from xslFiles import xslFiles
 
-def type6(templateVersion=0.0, modelVersions=0.0, cleanup='y'):
+# Validate the format of the version string (e.g., '6.0.0')
+version_pattern = r'^\d+\.\d+\.\d+$'
+
+def type6(templateVersion='0.0.0', modelVersions='0.0.0', cleanup='y'):
   """
     Creates a set of .xpt archives, inside a single .xpta model archive, which can be installed into eXact's Online Editor.
     :param templateVersion: The version of the templates and all models within it (e.g. ELFH_Session version and ELFH_Radio version)
@@ -10,100 +13,103 @@ def type6(templateVersion=0.0, modelVersions=0.0, cleanup='y'):
     :return: An .xpta file that can be installed in eXact Packager
   """
 
-  models = [  {   'name': 'ELFH_ANIMATION', 
+  models = [  {   'name': 'ELFH_ANIMATION',
                     'sharedStyles': [],
                     'sharedCommon': []
                 },
-                {   'name': 'ELFH_Assessment', 
+                {   'name': 'ELFH_Assessment',
                     'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
-                {   'name': 'ELFH_Check', 
+                {   'name': 'ELFH_Check',
                     'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
-                {   'name': 'ELFH_Free', 
+                {   'name': 'ELFH_Free',
                     'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
-                {   'name': 'ELFH_IMG_STACKER', 
+                {   'name': 'ELFH_IMG_STACKER',
                     'sharedStyles': [],
                     'sharedCommon': []
                 },
-                {   'name': 'ELFH_JS_DDP', 
+                {   'name': 'ELFH_JS_DDP',
                     'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
-                {   'name': 'ELFH_JS_INFO_HS', 
+                {   'name': 'ELFH_JS_INFO_HS',
                    'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                    'sharedCommon': []
                 },
-                {   'name': 'ELFH_JS_QUES_HS', 
+                {   'name': 'ELFH_JS_QUES_HS',
                     'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
-                {   'name': 'ELFH_MRB', 
+                {   'name': 'ELFH_MRB',
                     'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
-                {   'name': 'ELFH_Multi', 
+                {   'name': 'ELFH_Multi',
                     'sharedStyles': [],
                     'sharedCommon': []
                 },
-                {   'name': 'ELFH_Pairs', 
+                {   'name': 'ELFH_Pairs',
                     'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
-                {   'name': 'ELFH_Question_Bank', 
+                {   'name': 'ELFH_Question_Bank',
                     'sharedStyles': [],
                     'sharedCommon': []
                 },
-                {   'name': 'ELFH_Radio', 
+                {   'name': 'ELFH_Radio',
                     'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
-                {   'name': 'ELFH_Session', 
+                {   'name': 'ELFH_Session',
                     'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
-                {   'name': 'ELFH_Sort', 
+                {   'name': 'ELFH_Sort',
                     'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
-                {   'name': 'ELFH_Sort_Order', 
+                {   'name': 'ELFH_Sort_Order',
                     'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
-                {   'name': 'ELFH_STREAM_VIDEO', 
+                {   'name': 'ELFH_STREAM_VIDEO',
                     'sharedStyles': [],
                     'sharedCommon': []
                 },
-                {   'name': 'ELFH_Tab', 
+                {   'name': 'ELFH_Tab',
                     'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 },
-                {   'name': 'ELFH_TF', 
+                {   'name': 'ELFH_TF',
                     'sharedStyles': [xslFiles.HTML.value, xslFiles.RICHTEXT.value, xslFiles.FUNCTIONS.value],
                     'sharedCommon': []
                 }
-           ]     
+           ]
 
-  if templateVersion == 0.0:
-      print('Specify the template version (e.g. 6.1):')
+  if templateVersion == '0.0.0':
+      print('Specify the template version (e.g. 6.0.0):')
       templateVersion = input()
 
   modelVersions = templateVersion
 
-  #if modelVersions == 0.0:
-  #    print('Specify the version for the models (e.g. 6.1):')
+  #if modelVersions == '0.0.0':
+  #    print('Specify the version for the models (e.g. 6.0.0):')
   #    modelVersions = input()
 
+  # Try-catch block to validate the version format
   try:
-      val = float(templateVersion)
-      val = float(modelVersions)
-  except ValueError:
-      print("Error!  Template and model versions must be a floating point number, e.g. 1.0")
-      sys.exit()    
+      if not re.match(version_pattern, templateVersion):
+        raise ValueError("Invalid template version format")
+      if not re.match(version_pattern, modelVersions):
+        raise ValueError("Invalid model version format")
+  except ValueError as e:
+      print(f"Error! {str(e)}. Versions must follow the format X.Y.Z, e.g. 6.0.0.")
+      sys.exit()
 
   cwd = Path.cwd()
 
@@ -133,7 +139,7 @@ def type6(templateVersion=0.0, modelVersions=0.0, cleanup='y'):
 
       # copy model code into build folder
       shutil.copytree(cwd / modelName, buildFolder / modelName)
-      
+
       if not Path.exists(buildFolder / modelName / "styles"):
           os.mkdir(buildFolder / modelName / "styles")
 
@@ -152,8 +158,8 @@ def type6(templateVersion=0.0, modelVersions=0.0, cleanup='y'):
               else:
                   newLine = newLine.replace(xptVersionSearchStr, xptVersionReplaceStr) # if this a sub lo, add the lo's version number to the top of the file
 
-              print(newLine, end='') # write the modified line to the file   
-      
+              print(newLine, end='') # write the modified line to the file
+
       # zip the model up into an xpt
       shutil.make_archive(buildFolder / modelName, 'zip', buildFolder / modelName)
       xptPath = str(modelName)+'.xpt'
@@ -166,7 +172,7 @@ def type6(templateVersion=0.0, modelVersions=0.0, cleanup='y'):
       if cleanup != 'n':
           shutil.rmtree(buildFolder / modelName)
           os.remove(str(buildFolder) + '\\' + xptPath)
-          
+
 
       print(str(model["name"]) + ' built')
 
@@ -200,7 +206,7 @@ def type4(templateVersion=0.0, cleanup='y'):
       val = float(modelVersions)
   except ValueError:
       print("Error!  Template and model versions must be a floating point number, e.g. 1.0")
-      sys.exit()    
+      sys.exit()
 
   cwd = Path.cwd()
 
@@ -265,8 +271,8 @@ def type4(templateVersion=0.0, cleanup='y'):
               else:
                   newLine = newLine.replace(xptVersionSearchStr, xptVersionReplaceStr) # if this a sub lo, add the lo's version number to the top of the file
 
-              print(newLine, end='') # write the modified line to the file   
-      
+              print(newLine, end='') # write the modified line to the file
+
       # zip the model up into an xpt
       shutil.make_archive(buildFolder / model, 'zip', buildFolder / model)
       xptPath = str(model)+'.xpt'
